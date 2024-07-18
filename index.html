@@ -1,6 +1,27 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="device-width, initial-scale=1.0">
+        <title>Rock Paper Scissors</title>
+    </head>
+</html>
+<body>
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+
+    <div id="results"></div>
+    <div id="score"></div>
+</body>
+
 <script>
+    let winCount = 0;
+    let loseCount = 0;
+
     function getComputerChoice() {
-        choice = Math.floor(Math.random() * 3); 
+        choice = Math.floor(Math.random() * 3);
 
         if (choice == 0) {
             return "paper"
@@ -15,61 +36,69 @@
 
     function playRound(playerSelection, computerSelection) {
         playerSelection = playerSelection.toLowerCase();
+        result = "";
 
         if (playerSelection == "rock" && computerSelection == "paper") {
-            return "You lost! Paper beats Rock"
+            result = "You lost! Paper beats Rock"
+            loseCount++;
         }
         else if (playerSelection == "paper" && computerSelection == "scissors") {
-            return "You lost! Scissors beats Paper"
+            result = "You lost! Scissors beats Paper"
+            loseCount++;
         }
         else if (playerSelection == "scissors" && computerSelection == "rock") {
-            return "You lost! Rock beats Scissors"
+            result = "You lost! Rock beats Scissors"
+            loseCount++;
         }
-
         else if (playerSelection == "rock" && computerSelection == "scissors") {
-            return "You won! Rock beats Scissors"
+            result = "You won! Rock beats Scissors"
+            winCount++;
         }
         else if (playerSelection == "paper" && computerSelection == "rock") {
-            return "You won! Rock beats Scissors"
+            result = "You won! Rock beats Scissors"
+            winCount++;
         }
         else if (playerSelection == "scissors" && computerSelection == "paper") {
-            return "You won! Scissors beats paper"
+            result = "You won! Scissors beats paper"
+            winCount++;
         }
-
         else {
-            return `It's a draw! ${playerSelection} and ${computerSelection} are the same`
+            result = `It's a draw! ${playerSelection} and ${computerSelection} are the same`
+        }
+        document.getElementById('results').innerText = result;
+        document.getElementById('score').innerText = `Player Wins: ${winCount} Computer Wins: ${loseCount}`;
+
+        if (winCount == 5 || loseCount == 5){
+            announceWinner();
         }
     }
 
-    function playGame(){
-        let winCount = 0;
-        let loseCount = 0;
+    document.getElementById('rock').addEventListener('click', () => {
+        playRound('rock', getComputerChoice());
+    })
+    document.getElementById('paper').addEventListener('click', () => {
+        playRound('paper', getComputerChoice());
+    })
+    document.getElementById('scissors').addEventListener('click', () => {
+        playRound('scissors', getComputerChoice());
+    })
+
+    function announceWinner(){
         let winner;
 
-        for (i = 0; i < 5; i++) {
-            let playerSelection = prompt("Choose Rock, Paper or Scissors");
-            let computerSelection = getComputerChoice();
-            let result = playRound(playerSelection, computerSelection);
-            console.log(result);
-
-            if (result.includes("won")) {
-                ++winCount;
-            }
-            if (result.includes("lost")) {
-                ++loseCount;
-            }
-        }
-
-        if (winCount > loseCount) {
+        if (winCount == 5) {
             winner = "The winner is the Player!"
         }
-        else if (winCount < loseCount) {
+        else if (loseCount == 5) {
             winner = "The winner is the Computer!"
         }
         else {
             winner = "The game is a draw!"
         }
 
-        console.log(winner)
+        document.getElementById('results').innerText = winner;
+
+        winCount = 0;
+        loseCount = 0;
     }
 </script>
